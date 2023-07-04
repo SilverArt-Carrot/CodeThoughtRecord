@@ -215,5 +215,7 @@ public class LeetCode {
         int[] nums = new int[]{2, 2, 0, 4, 3, 1};
         leetCode.nextPermutation(nums);
         Arrays.stream(nums).forEach(System.out::println);
+
+        // add some change in new computer
     }
 }
