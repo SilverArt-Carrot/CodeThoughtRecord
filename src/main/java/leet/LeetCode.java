@@ -194,26 +194,97 @@ public class LeetCode {
      *
      * 你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。
      */
-    public void rotate(int[][] matrix) {
-//        int length = matrix.length;
-//        for (int edge = 0; edge < length / 2; edge++) {
-//            for (int i = edge; i < length - edge; i++) {
-//                int temp = matrix[i][edge];
-//                matrix[i][edge] =
-//            }
-//        }
+    // 90度：转置 左右翻转
+    // 180度：上下翻转 左右翻转
+    // 270度：转置 上下翻转
+    public static void rotate(int[][] matrix) {
+        int n = matrix.length;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                int t = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = t;
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            int left = 0;
+            int right = n - 1;
+            while (left < right) {
+                int t = matrix[i][left];
+                matrix[i][left] = matrix[i][right];
+                matrix[i][right] = t;
+
+                left++;
+                right--;
+            }
+        }
+    }
+
+    /**
+     * 字母异位词分组
+     * 给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。
+     *
+     * 字母异位词 是由重新排列源单词的所有字母得到的一个新单词
+     *
+     * 输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+     * 输出: [["bat"],["nat","tan"],["ate","eat","tea"]]
+     */
+    public static List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> result = new ArrayList<>();
+        Map<Integer, List<String>> map = new HashMap<>();
+
+        for (String str : strs) {
+            char[] chars = str.toCharArray();
+            Arrays.sort(chars);
+            String s = new String(chars);
+
+            int hashCode = s.hashCode();
+            List<String> list = map.computeIfAbsent(hashCode, k -> new ArrayList<>());
+
+            list.add(str);
+        }
+
+        for (Map.Entry<Integer, List<String>> entry : map.entrySet()) {
+            result.add(entry.getValue());
+        }
+        return result;
     }
 
     public static void main(String[] args) {
-        LeetCode leetCode = new LeetCode();
-
-
+//        LeetCode leetCode = new LeetCode();
 //
-//        int[] heights = new int[]{1,8,6,2,5,4,8,3,7};
-//        System.out.println(leetCode.maxArea2(heights));
+////        int[] heights = new int[]{1,8,6,2,5,4,8,3,7};
+////        System.out.println(leetCode.maxArea2(heights));
+//
+//        int[] nums = new int[]{2, 2, 0, 4, 3, 1};
+//        leetCode.nextPermutation(nums);
+//        Arrays.stream(nums).forEach(System.out::println);
 
-        int[] nums = new int[]{2, 2, 0, 4, 3, 1};
-        leetCode.nextPermutation(nums);
-        Arrays.stream(nums).forEach(System.out::println);
+//        int[][] matrix = new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+//        for (int i = 0; i < 3; i++) {
+//            for (int j = 0; j < 3; j++) {
+//                System.out.print(matrix[i][j] + " ");
+//            }
+//            System.out.println();
+//        }
+//
+//        rotate(matrix);
+//
+//        for (int i = 0; i < 3; i++) {
+//            for (int j = 0; j < 3; j++) {
+//                System.out.print(matrix[i][j] + " ");
+//            }
+//            System.out.println();
+//        }
+
+        String[] strs = new String[]{"eat", "tea", "tan", "ate", "nat", "bat"};
+
+        List<List<String>> lists = groupAnagrams(strs);
+
+        for (List<String> list : lists) {
+            System.out.println(list);
+        }
     }
 }
