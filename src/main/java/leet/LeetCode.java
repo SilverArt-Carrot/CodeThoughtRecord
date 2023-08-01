@@ -366,62 +366,27 @@ public class LeetCode {
      * 输入: nums = [0]
      * 输出: [0]
      */
-    public void moveZeroes(int[] nums) {
+    public static void moveZeroes(int[] nums) {  // 双指针
+        int length = nums.length;
+        int left = 0;
+        int right = 0;
 
+        while (right < length) {
+            if (nums[right] != 0) {
+                int t = nums[left];
+                nums[left] = nums[right];
+                nums[right] = t;
+                left++;
+            }
+            right++;
+        }
     }
 
 
     public static void main(String[] args) {
-//        LeetCode leetCode = new LeetCode();
-//
-////        int[] heights = new int[]{1,8,6,2,5,4,8,3,7};
-////        System.out.println(leetCode.maxArea2(heights));
-//
-//        int[] nums = new int[]{2, 2, 0, 4, 3, 1};
-//        leetCode.nextPermutation(nums);
-//        Arrays.stream(nums).forEach(System.out::println);
+        int[] nums = new int[]{0,1,0,3,12};
+        moveZeroes(nums);
 
-//        int[][] matrix = new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-//        for (int i = 0; i < 3; i++) {
-//            for (int j = 0; j < 3; j++) {
-//                System.out.print(matrix[i][j] + " ");
-//            }
-//            System.out.println();
-//        }
-//
-//        rotate(matrix);
-//
-//        for (int i = 0; i < 3; i++) {
-//            for (int j = 0; j < 3; j++) {
-//                System.out.print(matrix[i][j] + " ");
-//            }
-//            System.out.println();
-//        }
-
-//        String[] strs = new String[]{"eat", "tea", "tan", "ate", "nat", "bat"};
-//
-//        List<List<String>> lists = groupAnagrams(strs);
-//
-//        for (List<String> list : lists) {
-//            System.out.println(list);
-//        }
-        // HashTable 不能有null的key 和 value，HashMap 可以
-
-//        Map<String, String> map = new HashMap<>();
-//        String put = map.put(null, "1");  // put是老值，没有就是null
-//        System.out.println(map.get(null));
-//        System.out.println(put);
-//
-//        String put1 = map.put("1", null);
-//        System.out.println(map.get("1"));
-//        System.out.println(put1);
-
-//        int[] nums = new int[]{0,3,7,2,5,8,4,6,0,1};
-//        int i = longestConsecutive(nums);
-//        System.out.println(i);
-
-//        int[] nums = new int[]{100,4,200,1,3,2};
-//        int i = longestConsecutive2(nums);
-//        System.out.println(i);
+        Arrays.stream(nums).forEach(System.out::println);
     }
 }
