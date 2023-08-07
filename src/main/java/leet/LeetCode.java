@@ -382,11 +382,67 @@ public class LeetCode {
         }
     }
 
+    /**
+     * 136. 只出现一次的数字
+     * 给你一个 非空 整数数组 nums ，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+     *
+     * 你必须设计并实现线性时间复杂度的算法来解决此问题，且该算法只使用常量额外空间。
+     *
+     * 示例 1 ：
+     *
+     * 输入：nums = [2,2,1]
+     * 输出：1
+     * 示例 2 ：
+     *
+     * 输入：nums = [4,1,2,1,2]
+     * 输出：4
+     * 示例 3 ：
+     *
+     * 输入：nums = [1]
+     * 输出：1
+     */
+    public int singleNumber(int[] nums) {  // set法，不满足额外空间
+        // 因为最多只出现两次
+        HashSet<Integer> set = new HashSet<>();
+
+        for (int num : nums) {
+            if (set.contains(num)) {
+                set.remove(num);
+            } else {
+                set.add(num);
+            }
+        }
+
+        return set.isEmpty() ? -1 : set.iterator().next();
+    }
+    /**
+     * 解题思路
+     * 标签：位运算
+     * 本题根据题意，线性时间复杂度 O(n)，很容易想到使用 Hash 映射来进行计算，遍历一次后结束得到结果，但是在空间复杂度上会达到 O(n)，需要使用较多的额外空间
+     * 既满足时间复杂度又满足空间复杂度，就要提到位运算中的异或运算 XOR，主要因为异或运算有以下几个特点：
+     * 一个数和 0 做 XOR 运算等于本身：a⊕0 = a
+     * 一个数和其本身做 XOR 运算等于 0：a⊕a = 0
+     * XOR 运算满足交换律和结合律：a⊕b⊕a = (a⊕a)⊕b = 0⊕b = b
+     * 故而在以上的基础条件上，将所有数字按照顺序做异或运算，最后剩下的结果即为唯一的数字
+     * 时间复杂度：O(n)，空间复杂度：O(1)
+     */
+    public static int singleNumber2(int[] nums) {
+        int ans = 0;
+        for(int num: nums) {
+            ans ^= num;
+        }
+        return ans;
+    }
+
 
     public static void main(String[] args) {
-        int[] nums = new int[]{0,1,0,3,12};
-        moveZeroes(nums);
+//        int[] nums = new int[]{0,1,0,3,12};
+//        moveZeroes(nums);
+//
+//        Arrays.stream(nums).forEach(System.out::println);
+        int[] nums = new int[]{4,1,2,1,2};
 
-        Arrays.stream(nums).forEach(System.out::println);
+        int i = singleNumber2(nums);
+        System.out.println(i);
     }
 }
