@@ -434,15 +434,270 @@ public class LeetCode {
         return ans;
     }
 
+    /**
+     * 3. 无重复字符的最长子串
+     * 中等
+     * 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
+     * 示例 1:
+     *
+     * 输入: s = "abcabcbb"
+     * 输出: 3
+     * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+     * 示例 2:
+     *
+     * 输入: s = "bbbbb"
+     * 输出: 1
+     * 解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+     * 示例 3:
+     *
+     * 输入: s = "pwwkew"
+     * 输出: 3
+     * 解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+     *      请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+     */
+    public static int lengthOfLongestSubstring(String s) {
+        int max = 0;
+        int left = 0; // 记录不重复子串的左边起始位置
+        Map<Character, Integer> map = new HashMap<>();  // key 是不重复字符， value 是字符在字符串中的索引位置
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (map.containsKey(c)) {  // 如果出现重复字符，则比较left和重复字符索引位+1，取最大值，为了防止abba类似字符串遇到最后的a时left回退回去
+                left = Math.max(left, map.get(c) + 1);
+            }
+            map.put(c, i);
+            max = Math.max(max, i - left + 1);
+        }
+        return max;
+    }
+
+    /**
+     * 438. 找到字符串中所有字母异位词
+     * 给定两个字符串 s 和 p，找到 s 中所有 p 的 异位词 的子串，返回这些子串的起始索引。不考虑答案输出的顺序。
+     *
+     * 异位词 指由相同字母重排列形成的字符串（包括相同的字符串）。
+     * 示例 1:
+     *
+     * 输入: s = "cbaebabacd", p = "abc"
+     * 输出: [0,6]
+     * 解释:
+     * 起始索引等于 0 的子串是 "cba", 它是 "abc" 的异位词。
+     * 起始索引等于 6 的子串是 "bac", 它是 "abc" 的异位词。
+     *  示例 2:
+     *
+     * 输入: s = "abab", p = "ab"
+     * 输出: [0,1,2]
+     * 解释:
+     * 起始索引等于 0 的子串是 "ab", 它是 "ab" 的异位词。
+     * 起始索引等于 1 的子串是 "ba", 它是 "ab" 的异位词。
+     * 起始索引等于 2 的子串是 "ab", 它是 "ab" 的异位词。
+     */
+    public static List<Integer> findAnagrams(String s, String p) { // 超时了哥
+        List<Integer> result = new ArrayList<>();
+        int length = p.length();
+        if (s.length() < length) {
+            return result;
+        }
+
+        char[] chars = p.toCharArray();
+        Arrays.sort(chars);
+        String p0 = new String(chars);
+
+        LinkedList<Character> list = new LinkedList<>();
+        for (int i = 0; i < length - 1; i++) {
+            list.add(s.charAt(i));
+        }
+
+        for (int i = length - 1; i < s.length(); i++) {
+            list.add(s.charAt(i));
+
+            char[] tmp = new char[list.size()];
+            for (int j = 0; j < list.size(); j++) {
+                tmp[j] = list.get(j);
+            }
+
+            Arrays.sort(tmp);
+            String tepS = new String(tmp);
+            if (tepS.equals(p0)) {
+                result.add(i - length + 1);
+            }
+
+            list.removeFirst();
+        }
+        return result;
+    }
+    public static List<Integer> findAnagrams2(String s, String p) {  // 没超时，但是写的罗里吧嗦
+        List<Integer> result = new ArrayList<>();
+        int pl = p.length();
+        if (s.length() < pl) {
+            return result;
+        }
+
+        int[] pMap = new int[26];
+        for (int i = 0; i < p.length(); i++) {
+            pMap[p.charAt(i) - 'a']++;
+        }
+
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < pl - 1; i++) {
+            putIntoMap(map, s.charAt(i));
+        }
+
+        boolean isMatch = false;
+        Character intoC = null;
+        Character removeC = null;
+
+        for (int i = pl - 1; i < s.length(); i++) {
+            char ic = s.charAt(i);
+            putIntoMap(map, ic);
+            intoC = ic;
+
+            if (isMatch) {
+                Integer c1 = map.get(intoC);
+                Integer c2 = map.get(removeC);
+                isMatch = (c1 == pMap[intoC - 'a'] && c2 == pMap[removeC - 'a']);
+            } else {
+                isMatch = match(map, pMap);
+            }
+
+            if (isMatch) {
+                result.add(i - pl + 1);
+            }
+
+            char rc = s.charAt(i - pl + 1);
+            removeFromMap(map, rc);
+            removeC = rc;
+        }
+        return result;
+    }
+    public List<Integer> findAnagrams3(String s, String p) {  // LeetCode 官方滑动窗口
+        int sLen = s.length(), pLen = p.length();
+
+        if (sLen < pLen) {
+            return new ArrayList<>();
+        }
+
+        List<Integer> ans = new ArrayList<>();
+        int[] sCount = new int[26];
+        int[] pCount = new int[26];
+        for (int i = 0; i < pLen; ++i) {
+            ++sCount[s.charAt(i) - 'a'];
+            ++pCount[p.charAt(i) - 'a'];
+        }
+
+        if (Arrays.equals(sCount, pCount)) {
+            ans.add(0);
+        }
+
+        for (int i = 0; i < sLen - pLen; ++i) {
+            --sCount[s.charAt(i) - 'a'];
+            ++sCount[s.charAt(i + pLen) - 'a'];
+
+            if (Arrays.equals(sCount, pCount)) {
+                ans.add(i + 1);
+            }
+        }
+
+        return ans;
+    }
+
+    public static void putIntoMap(Map<Character, Integer> map, char c) {
+        Integer count = map.getOrDefault(c, 0);
+        count++;
+        map.put(c, count);
+    }
+
+    public static void removeFromMap(Map<Character, Integer> map, char c) {
+        Integer count = map.get(c);
+        if (count != null) {
+            count--;
+            map.put(c, count);
+        }
+    }
+
+    public static boolean match(Map<Character, Integer> map, int[] pMap) {
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            Character key = entry.getKey();
+            Integer value = entry.getValue();
+            if (pMap[key - 'a'] != value) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 1749. 任意子数组和的绝对值的最大值
+     * 给你一个整数数组 nums 。一个子数组 [numsl, numsl+1, ..., numsr-1, numsr] 的 和的绝对值 为 abs(numsl + numsl+1 + ... + numsr-1 + numsr) 。
+     *
+     * 请你找出 nums 中 和的绝对值 最大的任意子数组（可能为空），并返回该 最大值 。
+     *
+     * abs(x) 定义如下：
+     *
+     * 如果 x 是负整数，那么 abs(x) = -x 。
+     * 如果 x 是非负整数，那么 abs(x) = x 。
+     * 示例 1：
+     *
+     * 输入：nums = [1,-3,2,3,-4]
+     * 输出：5
+     * 解释：子数组 [2,3] 和的绝对值最大，为 abs(2+3) = abs(5) = 5 。
+     * 示例 2：
+     *
+     * 输入：nums = [2,-5,1,-4,3,-2]
+     * 输出：8
+     * 解释：子数组 [-5,1,-4] 和的绝对值最大，为 abs(-5+1-4) = abs(-8) = 8 。
+     */
+    public static int maxAbsoluteSum(int[] nums) {
+        int max = 0;
+        for (int i = 0; i < nums.length; i++) {
+            int sum = nums[i];
+            max = Math.max(max, Math.abs(sum));
+            for (int j = i + 1; j < nums.length; j++) {
+                sum += nums[j];
+                max = Math.max(max, Math.abs(sum));
+            }
+        }
+        return max;
+    }
+    /**
+     * 问题可以转换成求 最大子数组和 以及「最小子数组和的绝对值（相反数）」，这二者中的最大值就是答案。
+     */
+    public static int maxAbsoluteSum2(int[] nums) {
+        int result = 0;
+        int minSum = 0;
+        int maxSum = 0;
+        for (int num : nums) {
+            maxSum += num;
+            if (maxSum <= 0) {
+                maxSum = 0;
+            }
+
+            minSum += num;
+            if (minSum >= 0) {
+                minSum = 0;
+            }
+
+            result = Math.max(result, Math.max(maxSum, -minSum));
+        }
+        return result;
+    }
 
     public static void main(String[] args) {
 //        int[] nums = new int[]{0,1,0,3,12};
 //        moveZeroes(nums);
 //
 //        Arrays.stream(nums).forEach(System.out::println);
-        int[] nums = new int[]{4,1,2,1,2};
+//        int[] nums = new int[]{4,1,2,1,2};
+//
+//        int i = singleNumber2(nums);
+//        System.out.println(i);
 
-        int i = singleNumber2(nums);
-        System.out.println(i);
+//        List<Integer> anagrams = findAnagrams2("cbaebabacd", "abc");
+//        System.out.println(anagrams);
+//        int[] nums = new int[]{2,-5,1,-4,3,-2};
+//        int i = maxAbsoluteSum2(nums);
+//        System.out.println(i);
+
+        int l = lengthOfLongestSubstring("abbaaa");
+        System.out.println(l);
     }
 }
