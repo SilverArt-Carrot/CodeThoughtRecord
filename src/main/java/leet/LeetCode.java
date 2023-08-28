@@ -814,26 +814,61 @@ public class LeetCode {
         return answer;
     }
 
+    /**
+     * 56. 合并区间
+     * 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。
+     * 请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。
+     *
+     * 示例 1：
+     * 输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+     * 输出：[[1,6],[8,10],[15,18]]
+     * 解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+     * 示例 2：
+     *
+     * 输入：intervals = [[1,4],[4,5]]
+     * 输出：[[1,5]]
+     * 解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。
+     *
+     * 提示：
+     * 1 <= intervals.length <= 104
+     * intervals[i].length == 2
+     * 0 <= starti <= endi <= 104
+     *
+     * 我们首先将区间按照起始值进行排序，然后遍历每个区间，如果当前区间的起始值小于等于前一个区间的结束值，
+     * 说明它们有重叠，我们更新当前区间的结束值为较大的结束值。如果没有重叠，我们将当前区间添加到合并后的区间列表中。
+     * 最后，将合并后的区间列表转换为二维数组并返回。
+     */
+    public static int[][] merge2(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+
+        ArrayList<int[]> list = new ArrayList<>();
+        for (int[] interval : intervals) {
+            if (list.isEmpty()) {
+                list.add(interval);
+            } else {
+                int[] preInterval = list.get(list.size() - 1);
+                if (interval[0] <= preInterval[1]) {
+                    preInterval[1] = Math.max(preInterval[1], interval[1]);
+                } else {
+                    list.add(interval);
+                }
+            }
+        }
+
+        int[][] result = new int[list.size()][];
+        int i = 0;
+        for (int[] interval : list) {
+            result[i++] = interval;
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
-//        int[] nums = new int[]{0,1,0,3,12};
-//        moveZeroes(nums);
-//
-//        Arrays.stream(nums).forEach(System.out::println);
-//        int[] nums = new int[]{4,1,2,1,2};
-//
-//        int i = singleNumber2(nums);
-//        System.out.println(i);
+        int[][] intervals = new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}};
+        int[][] merge = merge2(intervals);
+        for (int[] item : merge) {
+            System.out.println(Arrays.toString(item));
+        }
 
-//        List<Integer> anagrams = findAnagrams2("cbaebabacd", "abc");
-//        System.out.println(anagrams);
-//        int[] nums = new int[]{2,-5,1,-4,3,-2};
-//        int i = maxAbsoluteSum2(nums);
-//        System.out.println(i);
-
-//        int l = lengthOfLongestSubstring("abbaaa");
-//        System.out.println(l);
-        int[] ints = circularGameLosers(5, 3);
-        System.out.println(Arrays.toString(ints));
-//        System.out.println();
     }
 }
