@@ -935,10 +935,43 @@ public class LeetCode {
      * n == nums.length
      * 1 <= n <= 300
      * nums[i] 为 0、1 或 2
+     *
+     * 在遍历数组的过程中，我们维护两个指针low和high，分别表示0和2的位置。同时，我们使用current指针遍历数组，根据不同的情况进行交换操作：
+     *
+     * 如果nums[current]等于0，说明找到了一个红色，将其交换到数组的前面，并将low和current指针都向后移动一位。
+     *
+     * 如果nums[current]等于2，说明找到了一个蓝色，将其交换到数组的后面，并将high指针向前移动一位，但current指针不需要移动，因为交换后当前位置的颜色未知。
+     *
+     * 如果nums[current]等于1，说明找到了一个白色，不需要交换，将current指针向后移动一位。
+     *
+     * 两边都是0 和 2，那中间自然就是 1 了
      */
-    public void sortColors(int[] nums) {
+    public static void sortColors(int[] nums) {
+        int low = 0;
+        int high = nums.length - 1;
+        int cur = 0;
 
+        while (cur <= high) {
+            if (nums[cur] == 0) {
+                swap(nums, low, cur);
+                low++;
+                cur++;
+            } else if (nums[cur] == 2) {
+                swap(nums, high, cur);
+                high--;
+            } else {
+                cur++;
+            }
+        }
     }
+
+    public static void swap(int[] nums, int i, int j) {
+        int t = nums[i];
+        nums[i] = nums[j];
+        nums[j] = t;
+    }
+
+
 
     public static void main(String[] args) {
 //        int[][] intervals = new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}};
@@ -947,8 +980,9 @@ public class LeetCode {
 //            System.out.println(Arrays.toString(item));
 //        }
 
-        int[][] grid = new int[][]{{1,3,1}, {1,5,1}, {4,2,1}};
-        int i = minPathSum(grid);
-        System.out.println(i);
+        int[] nums = new int[]{2,0,2,1,1,0};
+        sortColors(nums);
+
+        System.out.println(Arrays.toString(nums));
     }
 }
