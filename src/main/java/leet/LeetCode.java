@@ -701,6 +701,11 @@ public class LeetCode {
      * 1 <= nums.length <= 2 * 104
      * -1000 <= nums[i] <= 1000
      * -107 <= k <= 107
+     *
+     * 这个问题可以通过计算前缀和的方式来解决。我们维护一个sum变量来记录当前的累积和，
+     * 并使用一个Map来存储每个前缀和出现的频率。在遍历数组的过程中，我们不断更新sum和sumFrequency，
+     * 并检查是否存在之前的前缀和等于sum - k，如果存在，说明在那个位置到当前位置的子数组和为k，
+     * 因此将计数增加。最后，返回计数值即可。
      */
     public static int subarraySum(int[] nums, int k) { // i can't understand
         int count = 0, pre = 0;
@@ -863,12 +868,87 @@ public class LeetCode {
         return result;
     }
 
-    public static void main(String[] args) {
-        int[][] intervals = new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}};
-        int[][] merge = merge2(intervals);
-        for (int[] item : merge) {
-            System.out.println(Arrays.toString(item));
+    /**
+     * 最小路径和
+     * 给定一个包含非负整数的 m x n 网格 grid ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+     *
+     * 说明：每次只能向下或者向右移动一步。
+     *
+     *
+     * 输入：grid = [[1,3,1],
+     *              [1,5,1],
+     *              [4,2,1]]
+     * 输出：7
+     * 解释：因为路径 1→3→1→1→1 的总和最小。
+     * 示例 2：
+     *
+     * 输入：grid = [[1,2,3],
+     *              [4,5,6]]
+     * 输出：12
+     * 提示：
+     *
+     * m == grid.length
+     * n == grid[i].length
+     * 1 <= m, n <= 200
+     * 0 <= grid[i][j] <= 200
+     */
+    public static int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        int[][] dp = new int[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 && j == 0) {
+                    dp[i][j] = grid[i][j];
+                } else if (i == 0) {
+                    dp[i][j] = dp[i][j - 1] + grid[i][j];
+                } else if (j == 0) {
+                    dp[i][j] = dp[i - 1][j] + grid[i][j];
+                } else {
+                    dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+                }
+            }
         }
 
+        return dp[m - 1][n - 1];
+    }
+
+
+    /**
+     * 75. 颜色分类
+     * 给定一个包含红色、白色和蓝色、共 n 个元素的数组 nums ，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
+     * 我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。
+     * 必须在不使用库内置的 sort 函数的情况下解决这个问题。
+     * 示例 1：
+     *
+     * 输入：nums = [2,0,2,1,1,0]
+     * 输出：[0,0,1,1,2,2]
+     * 示例 2：
+     *
+     * 输入：nums = [2,0,1]
+     * 输出：[0,1,2]
+     *
+     * 提示：
+     *
+     * n == nums.length
+     * 1 <= n <= 300
+     * nums[i] 为 0、1 或 2
+     */
+    public void sortColors(int[] nums) {
+
+    }
+
+    public static void main(String[] args) {
+//        int[][] intervals = new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}};
+//        int[][] merge = merge2(intervals);
+//        for (int[] item : merge) {
+//            System.out.println(Arrays.toString(item));
+//        }
+
+        int[][] grid = new int[][]{{1,3,1}, {1,5,1}, {4,2,1}};
+        int i = minPathSum(grid);
+        System.out.println(i);
     }
 }
