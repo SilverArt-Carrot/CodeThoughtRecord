@@ -969,6 +969,88 @@ public class LeetCode {
         nums[j] = t;
     }
 
+    /**
+     * 78. 子集
+     * 给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
+     *
+     * 解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
+     *
+     * 示例 1：
+     *
+     * 输入：nums = [1,2,3]
+     * 输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+     * 示例 2：
+     *
+     * 输入：nums = [0]
+     * 输出：[[],[0]]
+     *
+     * 提示：
+     *
+     * 1 <= nums.length <= 10
+     * -10 <= nums[i] <= 10
+     * nums 中的所有元素 互不相同
+     */
+    private final List<List<Integer>> sets = new ArrayList<>();
+    private final LinkedList<Integer> set = new LinkedList<>();
+
+    public List<List<Integer>> subsets(int[] nums) {
+        backtracking(0, nums);
+        return sets;
+    }
+
+    private void backtracking(int index, int[] nums) {
+        sets.add(new ArrayList<>(set));
+        if (set.size() == nums.length) {
+            return;
+        }
+        for (int i = index; i < nums.length; i++) {
+            set.add(nums[i]);
+            backtracking(i + 1, nums);
+            set.removeLast();
+        }
+    }
+
+    /**
+     * 79. 单词搜索
+     * 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+     * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+     *
+     * 示例 1：
+     * 输入：board = [["A","B","C","E"],
+     *              ["S","F","C","S"],
+     *              ["A","D","E","E"]], word = "ABCCED"
+     * 输出：true
+     *
+     * 示例 2：
+     * 输入：board = [["A","B","C","E"],
+     *              ["S","F","C","S"],
+     *              ["A","D","E","E"]], word = "SEE"
+     * 输出：true
+     *
+     * 示例 3：
+     * 输入：board = [["A","B","C","E"],
+     *              ["S","F","C","S"],
+     *              ["A","D","E","E"]], word = "ABCB"
+     * 输出：false
+     *
+     * 提示：
+     * m == board.length
+     * n = board[i].length
+     * 1 <= m, n <= 6
+     * 1 <= word.length <= 15
+     * board 和 word 仅由大小写英文字母组成
+     */
+    public boolean exist(char[][] board, String word) {  // dfs + 回溯【我写不来】
+        return false;
+    }
+
+    /**
+     * winter@posturemedia.com----snowflake1289
+     * caralaisure2@gmail.com----Rylee1015!
+     * claoliv@hotmail.com----Cl@u1906
+     * aidan@heggerud.com----,Toasty12
+     * contato@thiagofranco.com----Thi@go3003
+     */
     public static void main(String[] args) {
 //        int[][] intervals = new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}};
 //        int[][] merge = merge2(intervals);
@@ -976,9 +1058,9 @@ public class LeetCode {
 //            System.out.println(Arrays.toString(item));
 //        }
 
-        int[] nums = new int[]{2,0,2,1,1,0};
-        sortColors(nums);
-
-        System.out.println(Arrays.toString(nums));
+//        int[] nums = new int[]{2,0,2,1,1,0};
+//        sortColors(nums);
+//
+//        System.out.println(Arrays.toString(nums));
     }
 }
