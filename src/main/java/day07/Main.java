@@ -14,7 +14,7 @@ public class Main {
 //        TreeNode node5 = new TreeNode(1, node3, node4);
 //        List<Integer> list = new ArrayList<>();
 //        Main main = new Main();
-//        List<Integer> list1 = main.inOrder2(node5);
+//        List<Integer> list1 = main.inOrder4(node5);
 //        System.out.println(list1);
         Node node1 = new Node(1);
 
@@ -112,6 +112,25 @@ public class Main {
                 result.add(cur.val);
                 node = cur.right;
             }
+        }
+        return result;
+    }
+    public List<Integer> inOrder4(TreeNode root) { // 中 和上面的一样
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Deque<TreeNode> stack = new LinkedList<>();
+        TreeNode node = root;
+        while (node != null || !stack.isEmpty()) {
+            while (node != null) {
+                stack.push(node);
+                node = node.left;
+            }
+            node = stack.pop();
+            result.add(node.val);
+
+            node = node.right;
         }
         return result;
     }

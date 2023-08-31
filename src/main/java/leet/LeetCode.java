@@ -1105,8 +1105,51 @@ public class LeetCode {
      * 树中节点数目范围在[1, 10 ^ 4] 内
      * -2 ^ 31 <= Node.val <= 2 ^ 31 - 1
      */
-    public boolean isValidBST(TreeNode root) {
-        return false;
+    public boolean isValidBST(TreeNode root) {  // [5,4,6,null,null,3,7] hhh 草
+        return isValidBST(root, null, null);
+    }
+    private boolean isValidBST(TreeNode node, Integer lower, Integer upper) {
+        if (node == null) {
+            return true;
+        }
+
+        int val = node.val;
+        if (lower != null && val <= lower) {
+            return false;
+        }
+        if (upper != null && val >= upper) {
+            return false;
+        }
+
+        if (!isValidBST(node.left, lower, val)) {
+            return false;
+        }
+        if (!isValidBST(node.right, val, upper)) {
+            return false;
+        }
+
+        return true;
+    }
+    /**
+     * 中序遍历时，判断当前节点是否大于中序遍历的前一个节点，如果大于，说明满足 BST，继续遍历；否则直接返回 false。
+     */
+    int pre = Integer.MIN_VALUE;
+    private boolean isValidBST2(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        if(!isValidBST(root.left)) {
+            return false;
+        }
+
+        int val = root.val;
+        if (val <= pre) {
+            return false;
+        }
+        pre = val;
+
+        return isValidBST(root.right);
     }
 
     /**
