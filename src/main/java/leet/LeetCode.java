@@ -1041,6 +1041,71 @@ public class LeetCode {
      * board 和 word 仅由大小写英文字母组成
      */
     public boolean exist(char[][] board, String word) {  // dfs + 回溯【我写不来】
+        int m = board.length;
+        int n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dfs(board, word, 0, i, j, visited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean dfs(char[][] board, String word, int index, int row, int col, boolean[][] visited) {
+        if (index == word.length()) {
+            return true;
+        }
+
+        if (row < 0 || row >= board.length || col < 0 || col >= board[0].length || visited[row][col]) {
+            return false;
+        }
+
+        if (board[row][col] != word.charAt(index)) {
+            return false;
+        }
+
+        visited[row][col] = true;
+
+        boolean found = dfs(board, word, index + 1, row - 1, col, visited) ||
+                dfs(board, word, index + 1, row + 1, col, visited) ||
+                dfs(board, word, index + 1, row, col - 1, visited) ||
+                dfs(board, word, index + 1, row, col + 1, visited);
+
+        visited[row][col] = false;
+
+        return found;
+    }
+
+    /**
+     * 98. 验证二叉搜索树
+     * 给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。
+     *
+     * 有效 二叉搜索树定义如下：
+     *
+     * 节点的左子树只包含 小于 当前节点的数。
+     * 节点的右子树只包含 大于 当前节点的数。
+     * 所有左子树和右子树自身必须也是二叉搜索树。
+     *
+     * 示例 1：
+     *
+     * 输入：root = [2,1,3]
+     * 输出：true
+     *
+     * 示例 2：
+     * 输入：root = [5,1,4,null,null,3,6]
+     * 输出：false
+     * 解释：根节点的值是 5 ，但是右子节点的值是 4 。
+     *
+     *
+     * 提示：
+     * 树中节点数目范围在[1, 10 ^ 4] 内
+     * -2 ^ 31 <= Node.val <= 2 ^ 31 - 1
+     */
+    public boolean isValidBST(TreeNode root) {
         return false;
     }
 
