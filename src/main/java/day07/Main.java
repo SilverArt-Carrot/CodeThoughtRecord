@@ -5,6 +5,7 @@ import java.util.*;
 public class Main {
     /**
      * 树
+     * 跟树相关的数据结构还有栈和队列，递归想不来的时候不要忘了
      */
     public static void main(String[] args) {
 //        TreeNode node1 = new TreeNode(4, null, null);

@@ -1153,6 +1153,164 @@ public class LeetCode {
     }
 
     /**
+     * 从前序与中序遍历序列构造二叉树
+     * 给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
+     *
+     * 示例 1:
+     * 输入: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+     * 输出: [3,9,20,null,null,15,7]
+     *
+     * 示例 2:
+     * 输入: preorder = [-1], inorder = [-1]
+     * 输出: [-1]
+     *
+     * 提示:
+     * 1 <= preorder.length <= 3000
+     * inorder.length == preorder.length
+     * -3000 <= preorder[i], inorder[i] <= 3000
+     * preorder 和 inorder 均 无重复 元素
+     * inorder 均出现在 preorder
+     * preorder 保证 为二叉树的前序遍历序列
+     * inorder 保证 为二叉树的中序遍历序列
+     */
+    private final Map<Integer, Integer> indexMap = new HashMap<>();
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        int length = inorder.length;
+        for (int i = 0; i < length; i++) {
+            indexMap.put(inorder[i], i);
+        }
+
+        return build(preorder, inorder, 0, length - 1, 0, length - 1);
+    }
+    private TreeNode build(int[] preorder, int[] inorder, int pre_left, int pre_right, int in_left, int in_right) {
+        if (pre_left > pre_right || in_left > in_right) {
+            return null;
+        }
+
+        // 前序遍历的第一个节点为根节点
+        int val = preorder[pre_left];
+        TreeNode root = new TreeNode(val);
+
+        // 找到这个结点在中序遍历中的位置
+        Integer root_index = indexMap.get(val);
+
+        // 在中序遍历中左子树的长度
+        int left_tree_len = root_index - in_left;
+
+        // 确定前序遍历和中序遍历中的左右子树的区间
+        root.left = build(preorder, inorder, pre_left + 1, pre_left + left_tree_len, in_left, in_left + left_tree_len);
+        root.right = build(preorder, inorder, pre_left + left_tree_len + 1, pre_right, root_index + 1, in_right);
+
+        return root;
+    }
+
+    /**
+     * 二叉树展开为链表
+     * 给你二叉树的根结点 root ，请你将它展开为一个单链表：
+     * 展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+     * 展开后的单链表应该与二叉树 先序遍历 顺序相同。
+     *
+     * 示例 1：
+     * 输入：root = [1,2,5,3,4,null,6]
+     * 输出：[1,null,2,null,3,null,4,null,5,null,6]
+     *
+     * 示例 2：
+     * 输入：root = []
+     * 输出：[]
+     *
+     * 示例 3：
+     * 输入：root = [0]
+     * 输出：[0]
+     *
+     * 提示：
+     * 树中结点数在范围 [0, 2000] 内
+     * -100 <= Node.val <= 100
+     */
+    public void flatten(TreeNode root) {  // 我自己写的哈哈哈，先序遍历一遍存起来就ok了
+        if (root == null) {
+            return;
+        }
+        LinkedList<TreeNode> queue = new LinkedList<>();
+
+        Deque<TreeNode> stack = new LinkedList<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            queue.add(node);
+
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+        }
+
+        if (!queue.isEmpty()) {
+            queue.poll();
+            while (!queue.isEmpty()) {
+                TreeNode node = queue.poll();
+                root.left = null;
+                root.right = node;
+                root = node;
+            }
+        }
+    }
+    public void flatten2(TreeNode root) {  // 展开和遍历同时进行，利用栈存储遍历时的左右子节点信息
+        if (root == null) {
+            return;
+        }
+        Deque<TreeNode> stack = new LinkedList<>();
+        stack.push(root);
+        TreeNode prev = null;
+        while (!stack.isEmpty()) {
+            TreeNode curr = stack.pop();
+            if (prev != null) {
+                prev.left = null;
+                prev.right = curr;
+            }
+            if (curr.right != null) {
+                stack.push(curr.right);
+            }
+            if (curr.left != null) {
+                stack.push(curr.left);
+            }
+            prev = curr;
+        }
+    }
+
+    /**
+     * 单词拆分
+     * 给你一个字符串 s 和一个字符串列表 wordDict 作为字典。请你判断是否可以利用字典中出现的单词拼接出 s 。
+     * 注意：不要求字典中出现的单词全部都使用，并且字典中的单词可以重复使用。
+     *
+     * 示例 1：
+     * 输入: s = "leetcode", wordDict = ["leet", "code"]
+     * 输出: true
+     * 解释: 返回 true 因为 "leetcode" 可以由 "leet" 和 "code" 拼接成。
+     *
+     * 示例 2：
+     * 输入: s = "applepenapple", wordDict = ["apple", "pen"]
+     * 输出: true
+     * 解释: 返回 true 因为 "applepenapple" 可以由 "apple" "pen" "apple" 拼接成。
+     *      注意，你可以重复使用字典中的单词。
+     *
+     * 示例 3：
+     * 输入: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+     * 输出: false
+     *
+     * 提示：
+     * 1 <= s.length <= 300
+     * 1 <= wordDict.length <= 1000
+     * 1 <= wordDict[i].length <= 20
+     * s 和 wordDict[i] 仅由小写英文字母组成
+     * wordDict 中的所有字符串 互不相同
+     */
+    public boolean wordBreak(String s, List<String> wordDict) {
+        return false;
+    }
+
+    /**
      * winter@posturemedia.com----snowflake1289
      * caralaisure2@gmail.com----Rylee1015!
      * claoliv@hotmail.com----Cl@u1906
