@@ -1,9 +1,13 @@
 package review;
 
+import day02.ListNode;
+
 public class Review {
     public static void main(String[] args) {
 
     }
+
+    ///////////////////////////////////////数组///////////////////////////////////////
 
     // 二分
     public int search(int[] nums, int target) {
@@ -104,4 +108,103 @@ public class Review {
 
         return matrix;
     }
+
+    ///////////////////////////////////////链表///////////////////////////////////////
+
+    // 移除链表元素
+    public ListNode removeElements(ListNode head, int val) {
+        if (head == null) {
+            return null;
+        }
+        ListNode dummy = new ListNode(-1, head);  // 虚拟头节点
+        ListNode pre = dummy;
+
+        while (head != null) {
+            if (head.val == val) {
+                pre.next = head.next;
+            } else {
+                pre = head;
+            }
+            head = head.next;
+        }
+        return dummy.next;
+    }
+
+    // 设计链表
+    static class MyLinkedList {
+
+        int size;
+        ListNode head;
+
+        public MyLinkedList() {
+            size = 0;
+            head = new ListNode(-1);  // 虚拟头节点
+        }
+
+        public int get(int index) {
+            if (index < 0 || index >= size) {
+                return -1;
+            }
+            int i = 0;
+            ListNode node = head;
+            while (i <= index) {
+                node = node.next;
+                i++;
+            }
+            return node.val;
+        }
+
+        public void addAtHead(int val) {
+            addAtIndex(0, val);
+        }
+
+        public void addAtTail(int val) {
+            addAtIndex(size, val);
+        }
+
+        public void addAtIndex(int index, int val) {
+            if (index > size) {
+                return;
+            }
+            index = Math.max(index, 0);
+            int i = 0;
+            ListNode node = head;
+            while (i < index) {
+                node = node.next;
+                i++;
+            }
+            node.next = new ListNode(val, node.next);
+            size++;
+        }
+
+        public void deleteAtIndex(int index) {
+            if (index < 0 || index >= size) {
+                return;
+            }
+            int i = 0;
+            ListNode node = head;
+            while (i < index) {
+                node = node.next;
+                i++;
+            }
+            node.next = node.next.next;
+            size--;
+        }
+    }
+
+    // 反转链表
+    public ListNode reverseList(ListNode head) {
+        ListNode next = null;
+        ListNode pre = null;
+        while (head != null) {
+            next = head.next;
+
+            head.next = pre;
+            pre = head;
+            head = next;
+        }
+        return pre;
+    }
+
+    // 两两交换链表中的节点
 }
