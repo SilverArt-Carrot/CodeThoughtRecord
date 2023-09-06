@@ -2,6 +2,9 @@ package review;
 
 import day02.ListNode;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Review {
     public static void main(String[] args) {
 
@@ -207,4 +210,72 @@ public class Review {
     }
 
     // 两两交换链表中的节点
+    public ListNode swapPairs(ListNode head) {
+        ListNode dummy = new ListNode(-1, head);  // 虚拟头节点
+        ListNode first = null;
+        ListNode second = null;
+        ListNode tmp = null;
+        ListNode cur = dummy;
+
+        while (cur.next != null && cur.next.next != null) {
+            first = cur.next;
+            second = cur.next.next;
+            tmp = second.next;
+
+            cur.next = second;
+            second.next = first;
+            first.next = tmp;
+
+            cur = first;
+        }
+
+        return dummy.next;
+    }
+
+    // 删除链表的倒数第N个节点
+    public ListNode removeNthFromEnd(ListNode head, int n){
+        if (head == null || n <= 0) {
+            return head;
+        }
+        ListNode dummy = new ListNode(-1, head);
+        ListNode slow = dummy;
+        ListNode fast = dummy;
+
+        for (int i = 0; i <= n; i++) {
+            if (fast != null) {
+                fast = fast.next;
+            } else {
+                return dummy.next;
+            }
+        }
+
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        slow.next = slow.next.next;
+        return dummy.next;
+    }
+
+    // 链表相交
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {  // set法，也可以使用代码随想录里的末尾对齐法，LeetCode里会更快
+        if (headA == null || headB == null) {
+            return null;
+        }
+
+        Set<ListNode> set = new HashSet<>();
+        while (headA != null) {
+            set.add(headA);
+            headA = headA.next;
+        }
+
+        while (headB != null) {
+            if (set.contains(headB)) {
+                return headB;
+            }
+            headB = headB.next;
+        }
+        return null;
+    }
 }
