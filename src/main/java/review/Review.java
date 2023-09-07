@@ -2,7 +2,9 @@ package review;
 
 import day02.ListNode;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Review {
@@ -277,5 +279,127 @@ public class Review {
             headB = headB.next;
         }
         return null;
+    }
+
+    // 环形链表II
+    public ListNode detectCycle(ListNode head) {
+        if (head == null || head.next == null) {  // 一个节点肯定无环
+            return null;
+        }
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (slow == fast) {
+                ListNode node = head;
+                while (node != slow) {
+                    node = node.next;
+                    slow = slow.next;
+                }
+                return node;
+            }
+        }
+        return null;
+    }
+
+    // 有效的字母异位词
+    public boolean isAnagram(String s, String t) {
+        int[] counts = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            counts[s.charAt(i) - 'a']++;
+        }
+
+        for (int i = 0; i < t.length(); i++) {
+            counts[t.charAt(i) - 'a']--;
+        }
+
+        for (int i = 0; i < counts.length; i++) {
+            if (counts[i] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 两个数组的交集
+    public int[] intersection(int[] nums1, int[] nums2) {
+        if (nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0) {
+            return new int[0];
+        }
+        Set<Integer> set1 = new HashSet<>();
+        for (int num : nums1) {
+            set1.add(num);
+        }
+
+        Set<Integer> set2 = new HashSet<>();
+        for (int num : nums2) {
+            if (set1.contains(num)) {
+                set2.add(num);
+            }
+        }
+
+        int[] res = new int[set2.size()];
+        int i = 0;
+        for (Integer num : set2) {
+            res[i++] = num;
+        }
+        return res;
+    }
+
+    // 快乐数
+    // 如果不是快乐数，会无限循环，可以使用set的方式，
+    // 也可以把它当成链表的，使用快慢指针来检测
+    public boolean isHappy(int n) {
+        int slow = n;
+        int fast = getNext(n);
+
+        while (slow != 1 && slow != fast) {
+            slow = getNext(slow);
+            fast = getNext(getNext(fast));
+        }
+        return slow == 1;
+    }
+    private int getNext(int n) {
+        int total = 0;
+        while (n > 0) {
+            int t = n % 10;
+            total += t * t;
+            n /= 10;
+        }
+        return total;
+    }
+
+    // 两数之和
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(target - nums[i])) {
+                return new int[]{map.get(target - nums[i]), i};
+            }
+            map.put(nums[i], i);
+        }
+        return null;
+    }
+
+    // 四数相加II
+    public int fourSumCount(int[] nums1, int[] nums2, int[] nums3, int[] nums4) {
+        int count = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num1 : nums1) {
+            for (int num2 : nums2) {
+                map.put(num1 + num2, map.getOrDefault(num1 + num2, 0) + 1);
+            }
+        }
+
+        for (int num3 : nums3) {
+            for (int num4 : nums4) {
+                count += map.getOrDefault(-num3 - num4, 0);
+            }
+        }
+
+        return count;
     }
 }
