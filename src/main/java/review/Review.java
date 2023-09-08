@@ -5,10 +5,6 @@ import day02.ListNode;
 import java.util.*;
 
 public class Review {
-    public static void main(String[] args) {
-
-    }
-
     ///////////////////////////////////////数组///////////////////////////////////////
 
     // 二分
@@ -527,4 +523,34 @@ public class Review {
         }
     }
 
+    // 替换空格
+    public String replaceSpace(String s) {  // 可以用StringBuilder的，这样写我只是试试会不会快点
+        char[] chars = s.toCharArray();
+        int count = 0;
+        for (char c : chars) {
+            if (c == ' ') {
+                count++;
+            }
+        }
+
+        int length = chars.length + 2 * count;
+        char[] newChars = new char[length];
+        int index = length - 1;
+        for (int i = chars.length - 1; i >= 0; i--) {
+            if (chars[i] == ' ') {
+                newChars[index--] = '0';
+                newChars[index--] = '2';
+                newChars[index--] = '%';
+            } else {
+                newChars[index--] = chars[i];
+            }
+        }
+        return new String(newChars);
+    }
+
+    public static void main(String[] args) {
+        Review review = new Review();
+        String s = review.replaceSpace("We are happy.");
+        System.out.println(s);
+    }
 }
