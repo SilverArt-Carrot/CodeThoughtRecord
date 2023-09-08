@@ -302,6 +302,8 @@ public class Review {
         return null;
     }
 
+    /////////////////////////////////////哈希表/////////////////////////////////////
+
     // 有效的字母异位词
     public boolean isAnagram(String s, String t) {
         int[] counts = new int[26];
@@ -488,4 +490,41 @@ public class Review {
         }
         return result;
     }
+
+    /////////////////////////////////////字符串/////////////////////////////////////
+
+    // 反转字符串
+    public void reverseString(char[] s) {
+        int l = 0, r = s.length - 1;
+        while (l < r) {
+            char c = s[l];
+            s[l] = s[r];
+            s[r] = c;
+            l++;
+            r--;
+        }
+    }
+
+    // 反转字符串II
+    public String reverseStr(String s, int k) {
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length; i += 2 * k) {
+            if (i + k < chars.length) {
+                reverse(chars, i, i + k - 1);
+            } else {
+                reverse(chars, i, chars.length - 1);
+            }
+        }
+        return new String(chars);
+    }
+    private void reverse(char[] chars, int l, int r) {
+        while (l < r) {
+            char c = chars[l];
+            chars[l] = chars[r];
+            chars[r] = c;
+            l++;
+            r--;
+        }
+    }
+
 }
