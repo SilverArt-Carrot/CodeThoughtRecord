@@ -2,10 +2,7 @@ package review;
 
 import day02.ListNode;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Review {
     public static void main(String[] args) {
@@ -401,5 +398,94 @@ public class Review {
         }
 
         return count;
+    }
+
+    // 赎金信
+    public boolean canConstruct(String ransomNote, String magazine) {
+        int[] counts = new int[26];
+        for (char c : ransomNote.toCharArray()) {
+            counts[c - 'a']++;
+        }
+        for (char c : magazine.toCharArray()) {
+            counts[c - 'a']--;
+        }
+        for (int count : counts) {
+            if (count > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 三数之和
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(nums);
+
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (nums[i] > 0) {
+                return result;
+            }
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int left = i + 1;
+            int right = nums.length - 1;
+            while (left < right) {
+                int sum = nums[i] + nums[left] + nums[right];
+                if (sum > 0) {
+                    right--;
+                } else if (sum < 0) {
+                    left++;
+                } else {
+                    result.add(Arrays.asList(nums[i], nums[left], nums[right]));
+                    while (left < right && nums[left] == nums[left + 1]) left++;
+                    while (left < right && nums[right] == nums[right - 1]) right--;
+                    left++;
+                    right--;
+                }
+            }
+        }
+        return result;
+    }
+
+    // 四数之和
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(nums);
+
+        for (int i = 0; i < nums.length - 3; i++) {
+            if (nums[i] > target && nums[i] >= 0) {  // target 可以是负数，注意【0，0，0，0】，target = 0这组数据
+                return result;
+            }
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            for (int j = i + 1; j < nums.length - 2; j++) {
+                if (nums[i] + nums[j] > target && nums[j] >= 0) {  // nums[j] >= 0 则 nums[i] >= 0
+                    continue;
+                }
+                if (j > i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+                int left = j + 1;
+                int right = nums.length - 1;
+                while (left < right) {
+                    int sum = nums[i] + nums[j] + nums[left] + nums[right];
+                    if (sum < target) {
+                        left++;
+                    } else if (sum > target) {
+                        right--;
+                    } else {
+                        result.add(Arrays.asList(nums[i], nums[j], nums[left], nums[right]));
+                        while (left < right && nums[left] == nums[left + 1]) left++;
+                        while (left < right && nums[right] == nums[right - 1]) right--;
+                        left++;
+                        right--;
+                    }
+                }
+            }
+        }
+        return result;
     }
 }
