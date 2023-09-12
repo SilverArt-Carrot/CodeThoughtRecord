@@ -675,10 +675,106 @@ public class Review {
 
     /////////////////////////////////////栈与队列/////////////////////////////////////
 
+    // 用栈实现队列
+    static class MyQueue {
+        private final Deque<Integer> stackIn = new LinkedList<>();
+        private final Deque<Integer> stackOut = new LinkedList<>();
+
+        public MyQueue() {
+
+        }
+
+        public void push(int x) {
+            stackIn.push(x);
+        }
+
+        public int pop() {
+            dump();
+            return stackOut.pop();
+        }
+
+        public int peek() {
+            dump();
+            return stackOut.peek();
+        }
+
+        public boolean empty() {
+            return stackIn.isEmpty() && stackOut.isEmpty();
+        }
+
+        private void dump() {
+            if (!stackOut.isEmpty()) {
+                return;
+            }
+            while (!stackIn.isEmpty()) {
+                stackOut.push(stackIn.pop());
+            }
+        }
+    }
+
+    // 用队列实现栈
+    public static class MyStack {  // 不使用队列的size
+        private Deque<Integer> queue1 = new ArrayDeque<>();
+        private Deque<Integer> queue2 = new ArrayDeque<>(); // 起到了复制的作用，并且把元素倒了过来
+
+        public void push(int x) {
+            queue2.offer(x);
+            while (!queue1.isEmpty()) {
+                queue2.offer(queue1.poll());
+            }
+
+            Deque<Integer> tmp = queue1;
+            queue1 = queue2;
+            queue2 = tmp;
+        }
+
+        public int pop() {
+            return queue1.pop();
+        }
+
+        public int top() {
+            return queue1.peek();
+        }
+
+        public boolean empty() {
+            return queue1.isEmpty();
+        }
+    }
+    public static class MyStack2 {
+        private final Deque<Integer> queue = new ArrayDeque<>();
+
+        // 每次push的时候把链表倒过来
+        public void push(int x) {
+            queue.offer(x);
+            int size = queue.size();
+            while (size-- > 1) {
+                queue.offer(queue.poll());
+            }
+        }
+
+        public int pop() {
+            return queue.pop();
+        }
+
+        public int top() {
+            return queue.peek();
+        }
+
+        public boolean empty() {
+            return queue.isEmpty();
+        }
+    }
+
+
 
     public static void main(String[] args) {
-        Review review = new Review();
-        String s = review.replaceSpace("We are happy.");
-        System.out.println(s);
+        LinkedList<Integer> deque = new LinkedList<>();
+        deque.push(1);
+        deque.push(2);
+        deque.push(3);
+        System.out.println(deque.peek());
+        System.out.println(deque);
+
+        System.out.println(deque.poll());
     }
 }

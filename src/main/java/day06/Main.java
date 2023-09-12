@@ -79,7 +79,7 @@ public class Main {
         public void push(int x) {
             queue2.offer(x);
             while (!queue1.isEmpty()) {
-                queue2.offer(queue1.pop());
+                queue2.offer(queue1.poll());
             }
 
             Deque<Integer> tmp = queue1;
@@ -111,7 +111,7 @@ public class Main {
             queue.offer(x);
             int size = queue.size();
             while (size-- > 1) {
-                queue.offer(queue.pollFirst());
+                queue.offer(queue.poll());
             }
         }
 
@@ -120,7 +120,7 @@ public class Main {
         }
 
         public int top() {
-            return queue.peekFirst();
+            return queue.peek();
         }
 
         public boolean empty() {
