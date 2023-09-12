@@ -765,16 +765,35 @@ public class Review {
         }
     }
 
+    // 有效的括号
+    public boolean isValid(String s) {
+        int length = s.length();
+        if (length % 2 != 0) {
+            return false;
+        }
+        Deque<Character> stack = new LinkedList<>();
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if (c == '(') {
+                stack.push(')');
+            } else if (c == '[') {
+                stack.push(']');
+            } else if (c == '{') {
+                stack.push('}');
+            } else if (stack.isEmpty() || stack.peek() != c){
+                return false;
+            } else {
+                stack.pop();
+            }
+        }
+        return stack.isEmpty();
+    }
+
 
 
     public static void main(String[] args) {
-        LinkedList<Integer> deque = new LinkedList<>();
-        deque.push(1);
-        deque.push(2);
-        deque.push(3);
-        System.out.println(deque.peek());
-        System.out.println(deque);
-
-        System.out.println(deque.poll());
+        Review review = new Review();
+        boolean valid = review.isValid("(]");
+        System.out.println(valid);
     }
 }
