@@ -570,7 +570,77 @@ public class Review {
         return sb.toString().trim();
     }
 
-
+    // 实现 strStr()
+    // next数组统一减一操作
+    public int strStr(String haystack, String needle) {
+        if (needle.length() == 0) {
+            return 0;
+        }
+        int[] next = getNext(needle.toCharArray());
+        int j = -1;
+        for (int i = 0; i < haystack.length(); i++) {
+            while (j >= 0 && haystack.charAt(i) != needle.charAt(j + 1)) {
+                j = next[j];
+            }
+            if (haystack.charAt(i) == needle.charAt(j + 1)) {
+                j++;
+            }
+            if (j == needle.length() - 1) {
+                return i - needle.length() + 1;
+            }
+        }
+        return -1;
+    }
+    private int[] getNext(char[] chars) {
+        int[] next = new int[chars.length];
+        int j = -1;
+        next[0] = j;
+        for (int i = 1; i < chars.length; i++) {
+            while (j >= 0 && chars[i] != chars[j + 1]) {
+                j = next[j];
+            }
+            if (chars[i] == chars[j + 1]) {
+                j++;
+            }
+            next[i] = j;
+        }
+        return next;
+    }
+    // next数组统一不减一操作
+    public int strStr2(String haystack, String needle) {
+        if (needle.length() == 0) {
+            return 0;
+        }
+        int[] next = getNext2(needle.toCharArray());
+        int j = 0;
+        for (int i = 0; i < haystack.length(); i++) {
+            while (j > 0 && haystack.charAt(i) != needle.charAt(j)) {
+                j = next[j - 1];
+            }
+            if (haystack.charAt(i) == needle.charAt(j)) {
+                j++;
+            }
+            if (j == needle.length()) {
+                return i - needle.length() + 1;
+            }
+        }
+        return -1;
+    }
+    private int[] getNext2(char[] chars) {
+        int[] next = new int[chars.length];
+        int j = 0;
+        next[0] = j;
+        for (int i = 1; i < chars.length; i++) {
+            while (j > 0 && chars[i] != chars[j]) {
+                j = next[j - 1];
+            }
+            if (chars[i] == chars[j]) {
+                j++;
+            }
+            next[i] = j;
+        }
+        return next;
+    }
 
     public static void main(String[] args) {
         Review review = new Review();
