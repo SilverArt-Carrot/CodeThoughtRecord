@@ -597,6 +597,9 @@ public class Review {
         next[0] = j;
         for (int i = 1; i < chars.length; i++) {
             while (j >= 0 && chars[i] != chars[j + 1]) {
+                // 逐渐理解了，在构造next数组的过程中，i为后缀的下一个，j+1为前缀的下一个
+                // 当i与j+1不匹配时，取前缀j的最长相同前后缀的下一个与i继续匹配
+                // 这个过程中你可以理解后缀被当成了主串，前缀被当成了模式串
                 j = next[j];
             }
             if (chars[i] == chars[j + 1]) {
@@ -608,6 +611,7 @@ public class Review {
     }
     // next数组统一不减一操作
     public int strStr2(String haystack, String needle) {
+        haystack.indexOf("s");
         if (needle.length() == 0) {
             return 0;
         }
@@ -641,6 +645,36 @@ public class Review {
         }
         return next;
     }
+
+    // 重复的子字符串
+    /**
+     * 假设 s 可由 子串 x 重复 n 次构成，即 s = nx
+     * 则有 s+s = 2nx
+     * 移除 s+s 开头和结尾的字符，变为 (s+s)[1:-1]，则破坏了开头和结尾的子串 x
+     * 此时只剩 2n-2 个子串x
+     * 若 s 在 (s+s)[1:-1] 中，则有 2n-2 >= n，即 n >= 2
+     * 即 s 至少可由 x 重复 2 次构成
+     * 否则，n < 2，n 为整数，只能取 1，说明 s 不能由其子串重复多次构成
+     * class Solution:
+     *     def repeatedSubstringPattern(self, s: str) -> bool:
+     *         return s in (s+s)[1:-1]
+     */
+    public boolean repeatedSubstringPattern(String s) {
+        // 当一个字符串由重复子串组成的，最长相等前后缀不包含的子串就是最小重复子串
+        int[] next = getNext(s.toCharArray());
+        int last = next[s.length() - 1];
+        if (last != -1 && s.length() % (s.length() - (last + 1)) == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /////////////////////////////////////双指针法/////////////////////////////////////
+    // 题目都在上面了
+    //【移除元素】【反转字符串】【替换空格】【翻转字符串里的单词】【反转链表】【删除链表的倒数第N个节点】【链表相交】【环形链表II】【三数之和】【四数之和】
+
+    /////////////////////////////////////栈与队列/////////////////////////////////////
+
 
     public static void main(String[] args) {
         Review review = new Review();
