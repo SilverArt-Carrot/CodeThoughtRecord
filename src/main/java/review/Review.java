@@ -548,6 +548,30 @@ public class Review {
         return new String(newChars);
     }
 
+    // 翻转字符串里的单词
+    public String reverseWords(String s) {
+        // 1.使用内置的函数
+        // 2.先去除多余的空格，将整个字符串反转，最后再反转其中的单词
+        // 3.使用双指针，从后往前搜索单词
+
+        // 使用第三种方法
+        char[] chars = s.trim().toCharArray();
+        StringBuilder sb = new StringBuilder();
+
+        int left = chars.length - 1, right = left;
+        while (left >= 0) {
+            while (left >= 0 && chars[left] != ' ') left--;
+            sb.append(chars, left + 1, right - left);
+            sb.append(' ');
+            while (left >= 0 && chars[left] == ' ') left--;
+            right = left;
+        }
+
+        return sb.toString().trim();
+    }
+
+
+
     public static void main(String[] args) {
         Review review = new Review();
         String s = review.replaceSpace("We are happy.");
