@@ -789,11 +789,106 @@ public class Review {
         return stack.isEmpty();
     }
 
+    // 删除字符串中的所有相邻重复项
+    public String removeDuplicates(String s) {
+        LinkedList<Character> stack = new LinkedList<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (!stack.isEmpty() && stack.peek() == c) {
+                stack.pop();
+            } else {
+                stack.push(c);
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        while (!stack.isEmpty()) {
+            sb.append(stack.pollLast());
+        }
+        return sb.toString();
+    }
+    // 双指针法
+    public String removeDuplicates2(String s) {
+        char[] ch = s.toCharArray();
+        int fast = 0;
+        int slow = 0;
+        while(fast < s.length()){
+            // 直接用fast指针覆盖slow指针的值
+            ch[slow] = ch[fast];
+            // 遇到前后相同值的，就跳过，即slow指针后退一步，下次循环就可以直接被覆盖掉了
+            if(slow > 0 && ch[slow] == ch[slow - 1]){
+                slow--;
+            }else{
+                slow++;
+            }
+            fast++;
+        }
+        return new String(ch,0,slow);
+    }
 
+    // 逆波兰表达式求值
+    public int evalRPN(String[] tokens) {
+        LinkedList<Integer> stack = new LinkedList<>();
+        for (String token : tokens) {
+            if ("+".equals(token)) {
+                stack.push(stack.pop() + stack.pop());
+            } else if ("-".equals(token)) {
+                int num1 = stack.pop();
+                int num2 = stack.pop();
+                stack.push(num2 - num1);
+            } else if ("*".equals(token)) {
+                stack.push(stack.pop() * stack.pop());
+            } else if ("/".equals(token)) {
+                int num1 = stack.pop();
+                int num2 = stack.pop();
+                stack.push(num2 / num1);
+            } else {
+                stack.push(Integer.parseInt(token));
+            }
+        }
+        return stack.pop();
+    }
+
+    // 滑动窗口最大值
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int[] res = new int[nums.length - k + 1];
+        MyNewQueue queue = new MyNewQueue();
+        for (int i = 0; i < k - 1; i++) {
+            queue.add(nums[i]);
+        }
+        int index = 0;
+        for (int i = k - 1; i < nums.length; i++) {
+            queue.add(nums[i]);
+            res[index++] = queue.peek();
+            queue.remove(nums[i - k + 1]);
+        }
+        return res;
+    }
+    // 单调队列
+    static class MyNewQueue {
+        private final LinkedList<Integer> queue = new LinkedList<>();
+
+        public int peek() {
+            return queue.peekLast();
+        }
+
+        public void add(int x) {
+            while (!queue.isEmpty() && queue.peekFirst() < x) {
+                queue.pollFirst();
+            }
+            queue.addFirst(x);
+        }
+
+        public void remove(int x) {
+            if (!queue.isEmpty() && queue.peekLast() == x) {
+                queue.pollLast();
+            }
+        }
+    }
 
     public static void main(String[] args) {
         Review review = new Review();
-        boolean valid = review.isValid("(]");
-        System.out.println(valid);
+//        boolean valid = review.isValid("(]");
+//        System.out.println(valid);
+        System.out.println(review.removeDuplicates("abbaca"));
     }
 }
