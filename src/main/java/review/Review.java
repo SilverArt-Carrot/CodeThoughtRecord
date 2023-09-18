@@ -885,6 +885,27 @@ public class Review {
         }
     }
 
+    // 前 K 个高频元素
+    public int[] topKFrequent(int[] nums, int k) {
+        // 大顶堆
+        PriorityQueue<Map.Entry<Integer, Integer>> heap = new PriorityQueue<>((o1, o2) -> o2.getValue() - o1.getValue());
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            heap.offer(entry);
+        }
+
+        int[] res = new int[k];
+        for (int i = 0; i < k; i++) {
+            res[i] = heap.poll().getKey();
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
         Review review = new Review();
 //        boolean valid = review.isValid("(]");
