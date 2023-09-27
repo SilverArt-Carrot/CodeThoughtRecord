@@ -8,39 +8,20 @@ public class Main {
      * 跟树相关的数据结构还有栈和队列，递归想不来的时候不要忘了
      */
     public static void main(String[] args) {
-//        TreeNode node1 = new TreeNode(4, null, null);
-//        TreeNode node2 = new TreeNode(5, null, null);
-//        TreeNode node3 = new TreeNode(2, node1, node2);
-//        TreeNode node4 = new TreeNode(3, null, null);
-//        TreeNode node5 = new TreeNode(1, node3, node4);
-//        List<Integer> list = new ArrayList<>();
-//        Main main = new Main();
-//        List<Integer> list1 = main.inOrder4(node5);
-//        System.out.println(list1);
-        Node node1 = new Node(1);
-
-        Node node2 = new Node(3);
-        Node node3 = new Node(2);
-        Node node4 = new Node(4);
-
-        List<Node> list1 = new ArrayList<>();
-        list1.add(node2);
-        list1.add(node3);
-        list1.add(node4);
-
-        Node node5 = new Node(5);
-        Node node6 = new Node(6);
-
-        List<Node> list2 = new ArrayList<>();
-        list2.add(node5);
-        list2.add(node6);
-
-        node2.children = list2;
-
-        node1.children = list1;
         Main main = new Main();
-        int i = main.maxDepth(node1);
-        System.out.println(i);
+        TreeNode node1 = new TreeNode(1);
+
+        TreeNode node2 = new TreeNode(2);
+        TreeNode node3 = new TreeNode(3);
+        TreeNode node4 = new TreeNode(4);
+        node1.left = node2;
+        node1.right = node3;
+        node2.right = node4;
+
+        List<String> list = main.binaryTreePaths(node1);
+        for (String p : list) {
+            System.out.println(p);
+        }
     }
 
     /**
@@ -58,6 +39,7 @@ public class Main {
         preOrder(root.left, list);
         preOrder(root.right, list);
     }
+
     public void inOrder(TreeNode root, List<Integer> list) {  // 中
         if (root == null) {
             return;
@@ -66,6 +48,7 @@ public class Main {
         list.add(root.val);
         inOrder(root.right, list);
     }
+
     public void postOrder(TreeNode root, List<Integer> list) {  // 后
         if (root == null) {
             return;
@@ -97,6 +80,7 @@ public class Main {
         }
         return result;
     }
+
     public List<Integer> inOrder2(TreeNode root) {  // 中
         List<Integer> result = new ArrayList<>();
         if (root == null) {
@@ -116,6 +100,7 @@ public class Main {
         }
         return result;
     }
+
     public List<Integer> inOrder4(TreeNode root) { // 中 和上面的一样
         List<Integer> result = new ArrayList<>();
         if (root == null) {
@@ -135,6 +120,7 @@ public class Main {
         }
         return result;
     }
+
     // 后续遍历的取巧方法 中左右 --> 中右左 --> 左右中
     public List<Integer> postOrder2(TreeNode root) {
         List<Integer> result = new ArrayList<>();
@@ -189,6 +175,7 @@ public class Main {
         }
         return result;
     }
+
     public List<Integer> inOrder3(TreeNode root) {  // 中
         List<Integer> result = new ArrayList<>();
         if (root == null) {
@@ -214,6 +201,7 @@ public class Main {
         }
         return result;
     }
+
     public List<Integer> postOrder3(TreeNode root) { // 后
         List<Integer> result = new ArrayList<>();
         if (root == null) {
@@ -279,6 +267,7 @@ public class Main {
         reverse(root);
         return root;
     }
+
     private void reverse(TreeNode node) {
         if (node == null) {
             return;
@@ -292,9 +281,9 @@ public class Main {
 
     /**
      * 对称二叉树
-     *
+     * <p>
      * 给定一个二叉树，检查它是否是镜像对称的。
-     *
+     * <p>
      * 比较的不是左右节点，而是节点的左右子树是否反转
      */
     public boolean isSymmetric(TreeNode root) {  // 这是我写的，层序遍历的方法，将一层的全部放进去，进行头尾比较
@@ -342,6 +331,7 @@ public class Main {
         }
         return true;
     }
+
     // 其实也不用把一层的全部放进去，只要按照内侧和外侧的顺序加入容器，然后两个两个取就好了
     public boolean isSymmetric2(TreeNode root) {
         if (root == null) {
@@ -370,6 +360,7 @@ public class Main {
         }
         return true;
     }
+
     // 递归
     public boolean isSymmetric3(TreeNode root) {
         if (root == null) {
@@ -377,6 +368,7 @@ public class Main {
         }
         return compare(root.left, root.right);
     }
+
     private boolean compare(TreeNode left, TreeNode right) {
         if (left == null && right == null) {
             return true;
@@ -392,16 +384,17 @@ public class Main {
 
     /**
      * 二叉树的最大深度
-     *
+     * <p>
      * 给定一个二叉树，找出其最大深度。
-     *
+     * <p>
      * 二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
-     *
+     * <p>
      * 说明: 叶子节点是指没有子节点的节点。
      */
     public int maxDepth(TreeNode root) {  // 自己想的，康康递归三部曲，层序遍历也是可以的
         return depth(root, 0);
     }
+
     private int depth(TreeNode node, int depth) {
         if (node == null) {
             return depth;
@@ -409,6 +402,7 @@ public class Main {
         depth++;
         return Math.max(depth(node.left, depth), depth(node.right, depth));
     }
+
     /**
      * 递归法 代码随想录的
      */
@@ -420,14 +414,15 @@ public class Main {
         int rightDepth = maxDepth2(root.right);
         return Math.max(leftDepth, rightDepth) + 1;
     }
+
     /**
      * 求N叉树的最大深度
      */
     public int maxDepth(Node root) {
         if (root == null) return 0;
         int depth = 0;
-        if (root.children != null){
-            for (Node child : root.children){
+        if (root.children != null) {
+            for (Node child : root.children) {
                 depth = Math.max(depth, maxDepth(child));
             }
         }
@@ -436,11 +431,11 @@ public class Main {
 
     /**
      * 二叉树的最小深度
-     *
+     * <p>
      * 给定一个二叉树，找出其最小深度。
-     *
+     * <p>
      * 最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
-     *
+     * <p>
      * 说明: 叶子节点是指没有子节点的节点。
      */
     public int minDepth(TreeNode root) {  // 自己想的，康康递归三部曲
@@ -449,6 +444,7 @@ public class Main {
         }
         return depth2(root, 0);
     }
+
     private int depth2(TreeNode node, int depth) {
         depth++;
         TreeNode left = node.left;
@@ -463,6 +459,7 @@ public class Main {
             return Math.min(depth2(left, depth), depth2(right, depth));
         }
     }
+
     /**
      * 代码随想录的，使用的后续遍历
      */
@@ -481,6 +478,7 @@ public class Main {
         // 左右结点都不为null
         return Math.min(leftDepth, rightDepth) + 1;
     }
+
     /**
      * 求N叉树最小深度，chatGPT写的
      */
@@ -505,7 +503,8 @@ public class Main {
         public int val;
         public List<Node> children;
 
-        public Node() {}
+        public Node() {
+        }
 
         public Node(int _val) {
             val = _val;
@@ -515,5 +514,166 @@ public class Main {
             val = _val;
             children = _children;
         }
-    };
+    }
+
+    /**
+     * 完全二叉树的节点个数
+     */
+    public int countNodes(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int result = 1;
+        result += countNodes(root.left) + countNodes(root.right);
+        return result;
+    }
+
+    // 针对完全二叉树，如果一直遍历左孩子和一直遍历右孩子的个数相等就是满二叉树，可以直接2 ^ 数的深度 - 1
+    public int countNodes2(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftL = 0;  // 左子树高度
+        int rightL = 0;  // 右子树高度
+        TreeNode left = root.left;
+        TreeNode right = root.right;
+        while (left != null) {
+            left = left.left;
+            leftL++;
+        }
+        while (right != null) {
+            right = right.right;
+            rightL++;
+        }
+        if (leftL == rightL) {
+            return (2 << leftL) - 1;
+        }
+        return 1 + countNodes2(root.left) + countNodes2(root.right);
+    }
+
+    /**
+     * 平衡二叉树
+     */
+    public boolean isBalanced(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        int leftDepth = getDepth(root.left);
+        int rightDepth = getDepth(root.right);
+        if (Math.abs(leftDepth - rightDepth) > 1) {
+            return false;
+        }
+        return isBalanced(root.left) && isBalanced(root.right);
+    }
+
+    private int getDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftDepth = getDepth(root.left);
+        int rightDepth = getDepth(root.right);
+        return Math.max(leftDepth, rightDepth) + 1;
+    }
+
+    // 代码随想录的
+    public boolean isBalanced2(TreeNode root) {
+        return getHeight(root) != -1;
+    }
+
+    private int getHeight(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftHeight = getHeight(root.left);
+        if (leftHeight == -1) {
+            return -1;
+        }
+        int rightHeight = getHeight(root.right);
+        if (rightHeight == -1) {
+            return -1;
+        }
+        // 左右子树高度差大于1，return -1表示已经不是平衡树了
+        if (Math.abs(leftHeight - rightHeight) > 1) {
+            return -1;
+        }
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+
+    /**
+     * 二叉树的所有路径
+     */
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> result = new ArrayList<>();
+        LinkedList<String> path = new LinkedList<>();
+        backTracking(result, path, root);
+        return result;
+    }
+
+    private void backTracking(List<String> result, LinkedList<String> path, TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        path.add(String.valueOf(root.val));
+        if (root.left == null && root.right == null) {
+            result.add(String.join("->", path));
+            return;
+        }
+        if (root.left != null) {
+            backTracking(result, path, root.left);
+            path.removeLast();
+        }
+        if (root.right != null) {
+            backTracking(result, path, root.right);
+            path.removeLast();
+        }
+    }
+
+    /**
+     * 左叶子之和
+     */
+    public int sumOfLeftLeaves(TreeNode root) {  // 只要能遍历树就行
+        int res = 0;
+        if (root == null) {
+            return res;
+        }
+        LinkedList<TreeNode> stack = new LinkedList<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            if (node.left != null && node.left.left == null && node.left.right == null) {
+                res += node.left.val;
+            }
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 找树左下角的值
+     */
+    public int findBottomLeftValue(TreeNode root) {  // 层序遍历，用每层最左边的
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        int left = 0;
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int len = queue.size();
+
+            left = queue.peek().val;
+            while (len-- > 0) {
+                TreeNode node = queue.poll();
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+            }
+        }
+        return left;
+    }
 }
