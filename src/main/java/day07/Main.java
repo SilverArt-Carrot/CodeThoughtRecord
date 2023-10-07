@@ -1,5 +1,7 @@
 package day07;
 
+import com.sun.org.apache.bcel.internal.generic.LUSHR;
+
 import java.util.*;
 
 public class Main {
@@ -675,5 +677,127 @@ public class Main {
             }
         }
         return left;
+    }
+
+    /**
+     * 路径总和
+     */
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null) {
+            return false;
+        }
+        return hasPathSumTravel(root, targetSum - root.val);
+    }
+    private boolean hasPathSumTravel(TreeNode root, int count) {
+        if (root.left == null && root.right == null && count == 0) {
+            return true;
+        }
+        if (root.left == null && root.right == null) {
+            return false;
+        }
+        if (root.left != null && hasPathSumTravel(root.left, count - root.left.val)) {
+            return true;
+        }
+        if (root.right != null && hasPathSumTravel(root.right, count - root.right.val)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 路径总和 II
+     */
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        LinkedList<Integer> path = new LinkedList<>();
+        path.add(root.val);
+        hasPathSumTravel(root, targetSum - root.val, result, path);
+        return result;
+    }
+    private void hasPathSumTravel(TreeNode root, int count, List<List<Integer>> result, LinkedList<Integer> path) {
+        if (root.left == null && root.right == null && count == 0) {
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        if (root.left == null && root.right == null) {
+            return;
+        }
+        if (root.left != null) {
+            path.add(root.left.val);
+            hasPathSumTravel(root.left, count - root.left.val, result, path);
+            path.removeLast();
+        }
+        if (root.right != null) {
+            path.add(root.right.val);
+            hasPathSumTravel(root.right, count - root.right.val, result, path);
+            path.removeLast();
+        }
+    }
+
+    /**
+     * 从中序与后序遍历序列构造二叉树
+     */
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+        return build(inorder, postorder, 0, inorder.length - 1, 0, inorder.length - 1, map);
+    }
+    private TreeNode build(int[] inorder, int[] postorder, int inorderLeft, int inorderRight, int postorderLeft, int postorderRight, Map<Integer, Integer> map) {
+        if (inorderLeft > inorderRight || postorderLeft > postorderRight) {
+            return null;
+        }
+
+        // 后续遍历的最后一个节点为根节点
+        int rootVal = postorder[postorderRight];
+        TreeNode node = new TreeNode();
+        node.val = rootVal;
+
+        // 找到这个结点在中序遍历中的位置
+        Integer index = map.get(rootVal);
+
+        // 在中序遍历中左子树的长度
+        int left_tree_len = index - inorderLeft;
+
+        // 确定中序遍历和后续遍历的左右子树的区间
+        node.left = build(inorder, postorder, inorderLeft, inorderLeft + left_tree_len, postorderLeft, postorderLeft + left_tree_len - 1, map);
+        node.right = build(inorder, postorder, inorderLeft + left_tree_len + 1, inorderRight, postorderLeft + left_tree_len, postorderRight - 1, map);
+
+        return node;
+    }
+
+    /**
+     * 最大二叉树
+     */
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        return construct(nums, 0, nums.length - 1);
+    }
+    private TreeNode construct(int[] nums, int left, int right) {
+        if (left > right) {
+            return null;
+        }
+        if (left == right) {
+            return new TreeNode(nums[left]);
+        }
+
+        int maxIndex = left;
+        int maxVal = nums[left];
+        for (int i = left; i <= right; i++) {
+            if (nums[i] > maxVal) {
+                maxIndex = i;
+                maxVal = nums[i];
+            }
+        }
+
+        TreeNode node = new TreeNode(maxVal);
+
+        node.left = construct(nums, left, maxIndex - 1);
+        node.right = construct(nums, maxIndex + 1, right);
+
+        return node;
     }
 }
