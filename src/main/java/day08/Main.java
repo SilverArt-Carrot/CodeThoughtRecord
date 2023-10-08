@@ -244,7 +244,73 @@ public class Main {
      *
      * 示例: 输入: "aab" 输出: [ ["aa","b"], ["a","a","b"] ]
      */
-//    public List<List<String>> partition(String s) {
-//
-//    }
+    public List<List<String>> partition(String s) {
+        List<List<String>> result = new ArrayList<>();
+        LinkedList<String> strList = new LinkedList<>();
+        backtrack(s, 0, result, strList);
+        return result;
+    }
+    private void backtrack(String s, int start, List<List<String>> result, LinkedList<String> strList) {
+        if (start >= s.length()) {
+            result.add(new ArrayList<>(strList));
+            return;
+        }
+
+        for (int i = start; i < s.length(); i++) {
+            if (isPalindrome(s, start, i)) {
+                String sub = s.substring(start, i + 1);
+                strList.add(sub);
+                backtrack(s, i + 1, result, strList);
+                strList.removeLast();
+            }
+        }
+    }
+    private boolean isPalindrome(String s, int left, int right) {
+        while (left < right) {
+            if (s.charAt(left) != s.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+    /**
+     * 复原 IP 地址
+     */
+    public List<String> restoreIpAddresses(String s) {
+        List<String> result = new ArrayList<>();
+        LinkedList<String> strList = new LinkedList<>();
+        backtrack2(s, 0, result, strList);
+        return result;
+    }
+    private void backtrack2(String s, int start, List<String> result, LinkedList<String> strList) {
+        if (start >= s.length() && strList.size() == 4) {
+            result.add(String.join(".", strList));
+            return;
+        }
+
+        for (int i = start; i < s.length(); i++) {
+            if (strList.size() >= 4) {
+                break;
+            }
+            String sub = s.substring(start, i + 1);
+            if (isIp(sub)) {
+                strList.add(sub);
+                backtrack2(s, i + 1, result, strList);
+                strList.removeLast();
+            }
+        }
+    }
+    private boolean isIp(String s) {
+        if (s.startsWith("0") && s.length() > 1) {
+            return false;
+        }
+        if (s.length() > 3) {
+            return false;
+        }
+        long i = Long.parseLong(s);
+        return i <= 255;
+    }
 }
