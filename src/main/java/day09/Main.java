@@ -1,6 +1,8 @@
 package day09;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.stream.IntStream;
 
 public class Main {
     /**
@@ -20,6 +22,9 @@ public class Main {
         Main main = new Main();
         int i = main.maxProfit(profits);
         System.out.println(i);
+
+        int i1 = main.largestSumAfterKNegations(profits, 56);
+        System.out.println(i1);
     }
 
     /**
@@ -271,5 +276,50 @@ public class Main {
             }
         }
         return false;
+    }
+
+    /**
+     * 跳跃游戏 II
+     */
+    public int jump(int[] nums) {
+        if (nums.length == 1) {
+            return 0;
+        }
+        int res = 0;
+        int curCoverage = 0;  // 当前的覆盖距离
+        int nextCoverage = 0;  // 下一步可以覆盖的距离
+        for (int i = 0; i < nums.length; i++) {
+            nextCoverage = Math.max(nextCoverage, i + nums[i]);  // 每次都保留下一步可以覆盖的最大范围
+            if (i == curCoverage) {  // 已经到达当前的最远距离了，必须要走下一步
+                res++;
+                curCoverage = nextCoverage;
+                if (curCoverage >= nums.length - 1) {  // 当前范围可以达到最后一个
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * K 次取反后最大化的数组和
+     */
+    public int largestSumAfterKNegations(int[] nums, int k) {
+        // 按照绝对值大到小排序
+        nums = IntStream.of(nums).boxed().sorted((o1, o2) -> Math.abs(o2) - Math.abs(o1)).mapToInt(i -> i).toArray();
+
+        for (int i = 0; i < nums.length; i++) {  // 先把负数进行反转
+            if (k <= 0) {
+                break;
+            }
+            if (nums[i] < 0) {
+                nums[i] = -nums[i];
+                k--;
+            }
+        }
+        while (k-- > 0) {  // 对绝对值最小的数进行多次反转
+            nums[nums.length - 1] = -nums[nums.length - 1];
+        }
+        return Arrays.stream(nums).sum();
     }
 }
