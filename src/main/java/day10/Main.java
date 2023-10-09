@@ -354,16 +354,58 @@ public class Main {
         //定义dp数组：dp[j]表示背包容量为j时，能获得的最大价值
         int[] dp = new int[bagWeight + 1];
         //遍历顺序：先遍历物品，再遍历背包容量
-        for (int i = 0; i < wLen; i++){
+        for (int i = 0; i < wLen; i++) {
             // 一定要倒序，因为在二维数组来看，使用的是上方和左上的值，也就是上一层的值，倒序遍历不会覆盖上一层的值
             // 如果是正序遍历，覆盖了前面的值就相当于污染了上一层的值
-            for (int j = bagWeight; j >= weight[i]; j--){
+            for (int j = bagWeight; j >= weight[i]; j--) {
                 dp[j] = Math.max(dp[j], dp[j - weight[i]] + value[i]);
             }
         }
         //打印dp数组
-        for (int j = 0; j <= bagWeight; j++){
+        for (int j = 0; j <= bagWeight; j++) {
             System.out.print(dp[j] + " ");
         }
+    }
+
+    /**
+     * 分割等和子集
+     */
+    public boolean canPartition(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return false;
+        }
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        if (sum % 2 != 0) {
+            return false;
+        }
+        int target = sum / 2;
+        int[] dp = new int[target + 1];
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = target; j >= nums[i]; j--) {
+                dp[j] = Math.max(dp[j], dp[j - nums[i]] + nums[i]);
+            }
+        }
+        return dp[target] == target;
+    }
+
+    /**
+     * 最后一块石头的重量 II
+     */
+    public int lastStoneWeightII(int[] stones) {
+        int sum = 0;
+        for (int stone : stones) {
+            sum += stone;
+        }
+        int target = sum / 2;
+        int[] dp = new int[target + 1];
+        for (int i = 0; i < stones.length; i++) {
+            for (int j = target; j >= stones[i]; j--) {
+                dp[j] = Math.max(dp[j], dp[j - stones[i]] + stones[i]);
+            }
+        }
+        return sum - 2 * dp[target];
     }
 }
