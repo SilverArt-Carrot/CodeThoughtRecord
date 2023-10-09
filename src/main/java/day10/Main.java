@@ -30,7 +30,7 @@ public class Main {
         int[] weight = {1,3,4};
         int[] value = {15,20,30};
         int bagSize = 4;
-        testWeightBagProblem(weight, value, bagSize);
+        testWeightBagProblem2(weight, value, bagSize);
     }
 
     /**
@@ -311,6 +311,9 @@ public class Main {
      * 01背包问题
      * 有n件物品和一个最多能背重量为w 的背包。第i件物品的重量是weight[i]，得到的价值是value[i] 。
      * 每件物品只能用一次，求解将哪些物品装入背包里物品价值总和最大。
+     * int[] weight = {1,3,4};
+     * int[] value = {15,20,30};
+     * int bagSize = 4;
      */
     public static void testWeightBagProblem(int[] weight, int[] value, int bagSize){
         int[][] dp = new int[value.length][bagSize + 1];
@@ -335,6 +338,32 @@ public class Main {
                 System.out.print(dp[i][j] + " ");
             }
             System.out.println();
+        }
+    }
+
+    /**
+     * 01背包问题
+     * 滚动数组的写法
+     * 原二维dp数组
+     * 0 15 15 15 15
+     * 0 15 15 20 35
+     * 0 15 15 20 35
+     */
+    public static void testWeightBagProblem2(int[] weight, int[] value, int bagWeight){
+        int wLen = weight.length;
+        //定义dp数组：dp[j]表示背包容量为j时，能获得的最大价值
+        int[] dp = new int[bagWeight + 1];
+        //遍历顺序：先遍历物品，再遍历背包容量
+        for (int i = 0; i < wLen; i++){
+            // 一定要倒序，因为在二维数组来看，使用的是上方和左上的值，也就是上一层的值，倒序遍历不会覆盖上一层的值
+            // 如果是正序遍历，覆盖了前面的值就相当于污染了上一层的值
+            for (int j = bagWeight; j >= weight[i]; j--){
+                dp[j] = Math.max(dp[j], dp[j - weight[i]] + value[i]);
+            }
+        }
+        //打印dp数组
+        for (int j = 0; j <= bagWeight; j++){
+            System.out.print(dp[j] + " ");
         }
     }
 }
