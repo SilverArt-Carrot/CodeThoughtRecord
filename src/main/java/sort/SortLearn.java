@@ -5,6 +5,9 @@ import java.util.Arrays;
 /**
  * 只有快排
  * 其他排序自己去搜一搜吧
+ * https://zhuanlan.zhihu.com/p/42586566
+ * https://juejin.cn/post/6844903687932887053
+ * https://xie.infoq.cn/article/ee95dfe949d2464ae8bc809b4
  */
 public class SortLearn {
     public void swap(int[] arr, int i, int j) {
