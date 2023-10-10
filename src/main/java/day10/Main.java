@@ -408,4 +408,31 @@ public class Main {
         }
         return sum - 2 * dp[target];
     }
+
+    /**
+     * 目标和
+     * https://programmercarl.com/0494.%E7%9B%AE%E6%A0%87%E5%92%8C.html#%E6%80%9D%E8%B7%AF
+     * 我是傻逼
+     */
+    public int findTargetSumWays(int[] nums, int target) {
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        if ((sum + target) % 2 != 0) {
+            return 0;
+        }
+        if (Math.abs(target) > sum) {
+            return 0;
+        }
+        target = (sum + target) / 2;
+        int[] dp = new int[target + 1];
+        dp[0] = 1;
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = target; j >= nums[i]; j--) {
+                dp[j] += dp[j - nums[i]];
+            }
+        }
+        return dp[target];
+    }
 }

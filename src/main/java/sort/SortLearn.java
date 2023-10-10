@@ -2,6 +2,10 @@ package sort;
 
 import java.util.Arrays;
 
+/**
+ * 只有快排
+ * 其他排序自己去搜一搜吧
+ */
 public class SortLearn {
     public void swap(int[] arr, int i, int j) {
         int temp = arr[i];
