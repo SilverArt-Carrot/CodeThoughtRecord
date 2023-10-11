@@ -1,7 +1,5 @@
 package day07;
 
-import com.sun.org.apache.bcel.internal.generic.LUSHR;
-
 import java.util.*;
 
 public class Main {
