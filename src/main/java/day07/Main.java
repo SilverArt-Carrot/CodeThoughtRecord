@@ -900,4 +900,65 @@ public class Main {
 
         return isValidBST(root.right);
     }
+
+    /**
+     * 二叉搜索树的最小绝对差
+     */
+    private TreeNode preNode = null;
+    private int min = Integer.MAX_VALUE;
+    public int getMinimumDifference(TreeNode root) {
+        if (root == null) {
+            return min;
+        }
+
+        getMinimumDifference(root.left);
+
+        if (preNode != null) {
+            min = Math.min(min, root.val - preNode.val);
+        }
+        preNode = root;
+
+        getMinimumDifference(root.right);
+        return min;
+    }
+
+    /**
+     * 二叉搜索树中的众数
+     */
+    private int maxCount = Integer.MIN_VALUE;
+    private int count = 0;
+    private TreeNode p = null;
+    private List<Integer> res = new ArrayList<>();
+    public int[] findMode(TreeNode root) {
+        traverseBST(root);
+        int[] result = new int[res.size()];
+        for (int i = 0; i < res.size(); i++) {
+            result[i] = res.get(i);
+        }
+        return result;
+    }
+    private void traverseBST(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+
+        traverseBST(root.left);
+        if (p == null || p.val != root.val) {
+            count = 0;
+        }
+        count++;
+        p = root;
+
+        if (count > maxCount) {
+            maxCount = count;
+            res.clear();
+            res.add(root.val);
+        } else if (count == maxCount) {
+            res.add(root.val);
+        }
+
+        traverseBST(root.right);
+    }
+
+
 }
