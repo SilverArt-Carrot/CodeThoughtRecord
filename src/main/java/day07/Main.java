@@ -798,4 +798,106 @@ public class Main {
 
         return node;
     }
+
+    /**
+     * 合并二叉树
+     * LeetCode line 724也有
+     */
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if (root1 == null) {
+            return root2;
+        }
+        if (root2 == null) {
+            return root1;
+        }
+
+        root1.val += root2.val;
+        root1.left = mergeTrees(root1.left, root2.left);
+        root1.right = mergeTrees(root1.right, root2.right);
+        return root1;
+    }
+    // 迭代法，拿个容器
+    public TreeNode mergeTrees2(TreeNode root1, TreeNode root2) {
+        if (root1 == null) {
+            return root2;
+        }
+        if (root2 == null) {
+            return root1;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root1);
+        queue.offer(root2);
+        while (!queue.isEmpty()) {
+            TreeNode node1 = queue.poll();
+            TreeNode node2 = queue.poll();
+
+            node1.val += node2.val;
+            if (node1.left != null && node2.left != null) {
+                queue.offer(node1.left);
+                queue.offer(node2.left);
+            }
+            if (node1.right != null && node2.right != null) {
+                queue.offer(node1.right);
+                queue.offer(node2.right);
+            }
+            if (node1.left == null && node2.left != null) {
+                node1.left = node2.left;
+            }
+            if (node1.right == null && node2.right != null) {
+                node1.right = node2.right;
+            }
+        }
+        return root1;
+    }
+
+    /**
+     * 二叉搜索树中的搜索
+     */
+    public TreeNode searchBST(TreeNode root, int val) {
+        while (root != null) {
+            if (root.val == val) {
+                return root;
+            } else if (root.val > val) {
+                root = root.left;
+            } else {
+                root = root.right;
+            }
+        }
+        return null;
+    }
+    // 递归
+    public TreeNode searchBST2(TreeNode root, int val) {
+        if (root == null) {
+            return null;
+        }
+        if (root.val == val) {
+            return root;
+        } else if (root.val > val) {
+            return searchBST2(root.left, val);
+        } else {
+            return searchBST2(root.right, val);
+        }
+    }
+
+    /**
+     * 验证二叉搜索树
+     * 二叉搜索树在中序遍历下是一个递增序列
+     */
+    private int pre = Integer.MIN_VALUE;
+    private boolean isValidBST(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        if (!isValidBST(root.left)) {
+            return false;
+        }
+        int val = root.val;
+        if (val <= pre) {
+            return false;
+        }
+        pre = val;
+
+        return isValidBST(root.right);
+    }
 }
