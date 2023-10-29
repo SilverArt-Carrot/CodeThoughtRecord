@@ -919,6 +919,7 @@ public class Main {
         preNode = root;
 
         getMinimumDifference(root.right);
+        // wdnmd
         return min;
     }
 
