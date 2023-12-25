@@ -1,5 +1,7 @@
 package day10;
 
+import java.util.Arrays;
+
 public class Main {
     /**
      * 动态规划
@@ -27,10 +29,11 @@ public class Main {
 //                System.out.println(arr[i][j]);
 //            }
 //        }
-        int[] weight = {1,3,4};
-        int[] value = {15,20,30};
-        int bagSize = 4;
-        testWeightBagProblem2(weight, value, bagSize);
+//        int[] weight = {1,3,4};
+//        int[] value = {15,20,30};
+//        int bagSize = 4;
+//        testWeightBagProblem2(weight, value, bagSize);
+        testCompletePack();
     }
 
     /**
@@ -458,5 +461,24 @@ public class Main {
             }
         }
         return dp[m][n];
+    }
+
+    // 完全背包
+    private static void testCompletePack(){
+        int[] weight = {1, 3, 4};
+        int[] value = {15, 20, 300};
+        int bagWeight = 5;
+        int[] dp = new int[bagWeight + 1];
+        for (int i = 0; i < weight.length; i++){ // 遍历物品
+            for (int j = weight[i]; j <= bagWeight; j++){ // 遍历背包容量
+                int a = dp[j];
+                int b = j - weight[i];
+                dp[j] = Math.max(a, dp[b] + value[i]);
+            }
+            System.out.println(Arrays.toString(dp));
+        }
+        for (int maxValue : dp){
+            System.out.println(maxValue + "   ");
+        }
     }
 }
