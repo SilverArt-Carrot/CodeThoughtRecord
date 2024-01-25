@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 /**
  * 打破String本身的不可变性
- * GPT回答String不可变的目的：安全性，StringPool的优化，hashcode不用重复计算，api的设计
+ * GPT回答String不可变的目的：线程安全性，StringPool的优化，hashcode不用重复计算，api的设计
  */
 public class StringTest {
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
@@ -22,6 +22,6 @@ public class StringTest {
         field.set(str, value);
 
         System.out.println(str);
-        System.out.println(str.hashCode());
+        System.out.println(str.hashCode());   // hashcode没有变化
     }
 }
