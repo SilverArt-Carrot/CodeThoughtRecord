@@ -1,9 +1,8 @@
 package test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.LongAdder;
 
 public class WhateverTest {
     public static void main(String[] args) {
@@ -11,8 +10,16 @@ public class WhateverTest {
 //        topKFrequent(nums, 2);
         // jdk1.7 concurrentHashMap -> default 16 segments -> segment extend reentrantLock
         // -> segment contains hashEntry -> hashEntry contains linked node
-        ConcurrentHashMap<Integer, Integer> map = new ConcurrentHashMap<>();
+//        ConcurrentHashMap<Integer, Integer> map = new ConcurrentHashMap<>();
 //        map.put(null, 1);
+//        System.out.println(2 << 3);
+//        LinkedList<Integer> list = new LinkedList<>();
+//        ListIterator<Integer> integerListIterator = list.listIterator();
+//
+//        int[] nums = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+//        int[] nums2 = new int[]{1, 2, 3};
+//        System.arraycopy(nums, 7, nums2, 0, 3);
+//        System.out.println(Arrays.toString(nums2));
     }
 
     public static void topKFrequent(int[] nums, int k) {
